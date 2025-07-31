@@ -1,0 +1,11 @@
+﻿/* detail.css - 通訊設定頁面專用樣式 */
+
+.scrollable-form {
+	max-height: calc(75vh - 150px); /* 設置最大高度為視窗高度的 75% */
+	overflow-y: auto; /* 啟用垂直滾動條 */
+	padding-right: 10px; /* 避免滾動條遮住文字 */
+}
+
+.table-clickable tbody tr {
+	cursor: pointer;
+}

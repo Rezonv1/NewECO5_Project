@@ -1,0 +1,26 @@
+﻿@model NewECO5.ViewModel.MeterDetailViewModel
+
+<table class="table table-bordered table-sm mt-3">
+    <tbody>
+        <tr>
+            <td class="text-end" style="width: 200px;">面積 (m²)</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Area, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td class="text-end">人數</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Persons, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
+        <tr>
+            <td class="text-end">自訂名稱</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.CustomName, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td class="text-end">自訂數值</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.CustomValue, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,93 @@
+﻿@using NewECO5.Models.Enum
+@model NewECO5.ViewModel.Comm_UnitSettingViewModel
+
+<h1>新增通訊</h1>
+
+<!-- 全域錯誤提示 -->
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <div>@error.ErrorMessage</div>
+        }
+    </div>
+}
+
+<form asp-action="Create" method="post" asp-antiforgery="true">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <!-- 說明 -->
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <input asp-for="Description" class="form-control" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <!-- 通訊模式單選按鈕 -->
+    <div class="form-group mb-3">
+        <label class="form-label">通訊模式</label>
+        @foreach (var item in Html.GetEnumSelectList<CommModeEnum>())
+        {
+            <div class="form-check">
+                <input class="form-check-input" type="radio" asp-for="IsTCPSetting" value="@item.Value" id="commMode_@item.Value" />
+                <label class="form-check-label" for="commMode_@item.Value">@item.Text</label>
+            </div>
+        }
+        <span asp-validation-for="IsTCPSetting" class="text-danger"></span>
+    </div>
+
+    <!-- IP 和 Port 設定 -->
+    <div class="form-group mb-3" id="ipPortField">
+        <div class="row">
+            <div class="col-md-6">
+                <label asp-for="IP" class="form-label" id="ipLabel"></label>
+                <input asp-for="IP" class="form-control" />
+                <span asp-validation-for="IP" class="text-danger"></span>
+            </div>
+            <div class="col-md-3" id="portField" style="@(Model.IsTCPSetting == CommModeEnum.TCP ? "" : "display:none")">
+                <label asp-for="Port" class="form-label"></label>
+                <input asp-for="Port" class="form-control" />
+                <span asp-validation-for="Port" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 提交和取消按鈕 -->
+    <div class="form-group mt-2">
+        <input type="submit" value="新增" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">取消</a>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // 初始化選擇
+            var commMode = '@((int)Model.IsTCPSetting)';
+            $('input[name="IsTCPSetting"]').prop('checked', false);
+            $('input[name="IsTCPSetting"][value="' + commMode + '"]').prop('checked', true);
+
+            updateCommModeFields();
+
+            $('input[name="IsTCPSetting"]').change(function () {
+                updateCommModeFields();
+            });
+
+            function updateCommModeFields() {
+                var commMode = $('input[name="IsTCPSetting"]:checked').val();
+                if (commMode === '@((int)CommModeEnum.TCP)') {
+                    $('#ipLabel').text('IP');
+                    $('#portField').show();
+                } else {
+                    $('#ipLabel').text('設定');
+                    $('#portField').hide();
+                    $('input[name="Port"]').val('');
+                }
+            }
+        });
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

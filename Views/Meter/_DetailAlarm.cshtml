@@ -1,0 +1,91 @@
+﻿@model NewECO5.ViewModel.MeterDetailViewModel
+@using NewECO5.Models.Enum
+
+<table class="table table-bordered table-sm mt-3">
+    <tbody>
+        <tr>
+            <td class="text-end" style="width: 200px;">電流上限</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_I_UpperLimit, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td class="text-end">電流下限</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_I_LowerLimit, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
+        <tr>
+            <td class="text-end">電壓型式</td>
+            <td>
+                @Html.DropDownListFor(model => model.PowerMeterSetting.Alarm_V_Type,
+                         new SelectList(Enum.GetValues(typeof(VotageType))),
+                         "-- 請選擇 --",
+                         new { @class = "form-select" })
+                @Html.ValidationMessageFor(model => model.PowerMeterSetting.Alarm_V_Type, "", new { @class = "text-danger" })
+            </td>
+            <td class="text-end">電壓上限</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_V_UpperLimit, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
+        <tr>
+            <td class="text-end">電壓下限</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_V_LowerLimit, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td class="text-end">頻率上限</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_HzUpperLimit, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
+        <tr>
+            <td class="text-end">頻率下限</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_HzLowerLimit, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td class="text-end">功因上限</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_PfUpperLimit, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
+        <tr>
+            <td class="text-end">功因下限</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_PfLowerLimit, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td class="text-end">電量上限</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_KWh_UpperLimit, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
+        <tr>
+            <td class="text-end">功率上限</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_kW_UpperLimit, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td class="text-end">功率下限</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_kW_LowerLimit, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
+        <tr>
+            <td class="text-end">待機功率值</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_kW_IdelValue, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td class="text-end">未關閉功率上限</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_notPowerOff_kW, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
+        <tr>
+            <td class="text-end">未關閉警報開始時間</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_notPowerOffAlarmStartTime, new { htmlAttributes = new { @class = "form-control", type = "datetime-local" } })
+            </td>
+            <td class="text-end">未關閉警報結束時間</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_notPowerOffAlarmEndTime, new { htmlAttributes = new { @class = "form-control", type = "datetime-local" } })
+            </td>
+        </tr>
+    </tbody>
+</table>

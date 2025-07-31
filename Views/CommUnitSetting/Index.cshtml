@@ -1,0 +1,137 @@
+﻿@using NewECO5.Models.Enum
+@model IEnumerable<NewECO5.ViewModel.Comm_UnitSettingViewModel>
+
+<style>
+    .scrollable-form {
+        max-height: calc(75vh - 150px);
+        overflow-y: auto;
+        padding-right: 10px;
+    }
+</style>
+
+<h1>通訊設定</h1>
+
+<!-- 搜尋區 -->
+<div class="mb-3">
+    <div class="row">
+        <div class="col-md-3">
+            <select id="searchField" class="form-select">
+                <option value="description">描述</option>
+                <option value="istcpsetting">通訊模式</option>
+                <option value="ip">TCP/RS-485</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <input type="text" id="searchQuery" class="form-control" placeholder="輸入關鍵字搜尋..." />
+        </div>
+        <div class="col-md-6 d-flex justify-content-end">
+            <a asp-action="Create" class="btn btn-primary">新增通訊</a>
+        </div>
+    </div>
+</div>
+
+<!-- 資料表 -->
+<div class="scrollable-form">
+    <table class="table table-hover table-clickable" id="meterListTable">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.First().Description)</th>
+                <th>@Html.DisplayNameFor(model => model.First().IsTCPSetting)</th>
+                <th>TCP/RS-485</th>
+                <th>@Html.DisplayNameFor(model => model.First().Port)</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr data-id="@item.Id">
+                    <td>@(item.Description ?? "無")</td>
+                    <td>@(item.IsTCPSetting == CommModeEnum.RS485 ? "RS-485" : "TCP")</td>
+                    <td>@(item.IP ?? "無")</td>
+                    <td>@(item.IsTCPSetting == CommModeEnum.TCP ? (item.Port ?? "無") : "N/A")</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">編輯</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">刪除</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            const searchUrl = '@Url.Action("SearchMeters", "MetersGroupSetting")';
+            const editUrl = '@Url.Action("Edit", "MetersGroupSetting")';
+            const deleteUrl = '@Url.Action("Delete", "MetersGroupSetting")';
+
+            function searchMeters() {
+                const searchQuery = $('#searchQuery').val();
+                const searchField = $('#searchField').val();
+
+                $.ajax({
+                    url: searchUrl,
+                    type: 'GET',
+                    data: { searchQuery, searchField },
+                    success: function (data) {
+                        const tbody = $('#meterListTable tbody');
+                        tbody.empty();
+
+                        if (!data || data.length === 0) {
+                            tbody.append(`<tr><td colspan="5" class="text-center text-warning">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>無符合條件的通訊設定
+                            </td></tr>`);
+                        } else {
+                            data.forEach(item => {
+                                const row = `<tr data-id="${item.id}">
+                                    <td>${item.description ?? '無'}</td>
+                                    <td>${item.isTCPSetting === 0 ? 'RS-485' : 'TCP'}</td>
+                                    <td>${item.ip ?? '無'}</td>
+                                    <td>${item.isTCPSetting === 1 ? (item.port ?? '無') : 'N/A'}</td>
+                                    <td>
+                                        <a href="${editUrl}?id=${item.id}" class="btn btn-sm btn-warning">編輯</a>
+                                        <a href="${deleteUrl}?id=${item.id}" class="btn btn-sm btn-danger">刪除</a>
+                                    </td>
+                                </tr>`;
+                                tbody.append(row);
+                            });
+                        }
+
+                        bindRowClick();
+                    },
+                    error: function () {
+                        alert('查詢失敗，請稍後再試。');
+                    }
+                });
+            }
+
+            function debounce(func, delay) {
+                let timer;
+                return function () {
+                    clearTimeout(timer);
+                    timer = setTimeout(func, delay);
+                };
+            }
+
+            function bindRowClick() {
+                $('.table-clickable tbody tr').off('click').on('click', function (e) {
+                    if ($(e.target).hasClass('btn') || $(e.target).closest('.btn').length) return;
+                    const id = $(this).data('id');
+                    if (id) {
+                        window.location.href = editUrl + '?id=' + id;
+                    }
+                });
+            }
+
+            $('#searchQuery').on('input', debounce(searchMeters, 300));
+            $('#searchField').on('change', searchMeters);
+            bindRowClick();
+        });
+    </script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

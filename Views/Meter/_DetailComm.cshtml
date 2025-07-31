@@ -1,0 +1,77 @@
+﻿@model MeterDetailViewModel
+
+<div class="form-group">
+    <label asp-for="MeterSetting.Brand" class="control-label"></label>
+    <select asp-for="MeterSetting.Brand" class="form-control" asp-items="Model.Brands">
+        <option value="">請選擇廠牌</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label asp-for="MeterSetting.Model" class="control-label"></label>
+    <select asp-for="MeterSetting.Model" class="form-control" asp-items="Model.Models">
+        <option value="">請選擇型號</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label asp-for="MeterSetting.WiringMode" class="control-label"></label>
+    <select asp-for="MeterSetting.WiringMode" class="form-control" asp-items="Model.WiringMode">
+        <option value="">請選擇接線方式</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label asp-for="MeterSetting.Loop" class="control-label"></label>
+    <select asp-for="MeterSetting.Loop" class="form-control" asp-items="Model.Loop">
+        <option value="">請選擇迴圈</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label asp-for="MeterSetting.MeterID" class="control-label"></label>
+    <input asp-for="MeterSetting.MeterID" class="form-control" />
+</div>
+
+<div class="form-group form-check">
+    <label class="form-check-label">
+        <input class="form-check-input" asp-for="MeterSetting.IsActived" />
+        @Html.DisplayNameFor(model => model.MeterSetting.IsActived)
+    </label>
+</div>
+
+<div class="form-group">
+    <label asp-for="MeterSetting.MetersGroupSetting_Id" class="control-label">通訊描述</label>
+    <select asp-for="MeterSetting.MetersGroupSetting_Id" class="form-control" asp-items="Model.Description">
+        <option value="">請選擇通訊設定</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label asp-for="MeterSetting.ConnectionStr" class="control-label"></label>
+    <input asp-for="MeterSetting.ConnectionStr" class="form-control" />
+</div>
+
+<div class="form-group">
+    <label asp-for="MeterSetting.IsTCPSetting" class="control-label">通訊模式</label>
+    <select asp-for="MeterSetting.IsTCPSetting" class="form-control" asp-items="Model.IsTCPSetting">
+        <option value="">請選擇模式</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label class="control-label">Modbus 格式</label><br />
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" asp-for="MeterSetting.Mode" value="RTU" />
+        <label class="form-check-label" for="MeterSetting_Mode">RTU</label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" asp-for="MeterSetting.Mode" value="TCP" />
+        <label class="form-check-label" for="MeterSetting_Mode">TCP</label>
+    </div>
+</div>
+
+<div class="form-group">
+    <label asp-for="MeterSetting.ProtocolStr" class="control-label"></label>
+    <input asp-for="MeterSetting.ProtocolStr" class="form-control" />
+</div>

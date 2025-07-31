@@ -1,0 +1,67 @@
+﻿@model NewECO5.ViewModel.MeterDetailViewModel
+
+@{
+    ViewData["Title"] = "Detail";
+}
+
+<h2>電表詳細資料</h2>
+
+<ul class="nav nav-tabs" id="meterTabs" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" data-bs-toggle="tab" href="#general" role="tab">一般</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#comm" role="tab">通訊</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#alarm" role="tab">警報</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#demand" role="tab">需量控制</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#efficiency" role="tab">效率</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#advanced" role="tab">進階</a>
+    </li>
+</ul>
+<div class="tab-content mt-3">
+    <div class="tab-pane fade show active" id="general" role="tabpanel">
+        
+        @Html.Partial("_DetailAdvanced", Model)
+    </div>
+    <div class="tab-pane fade" id="comm" role="tabpanel">
+        @Html.Partial("_DetailComm", Model)
+    </div>
+    <div class="tab-pane fade" id="alarm" role="tabpanel">
+        @Html.Partial("_DetailAlarm", Model)
+    </div>
+    <div class="tab-pane fade" id="demand" role="tabpanel">
+        @Html.Partial("_DetailDemand", Model)
+    </div>
+    <div class="tab-pane fade" id="efficiency" role="tabpanel">
+        @Html.Partial("_DetailEfficiency", Model)
+    </div>
+    <div class="tab-pane fade" id="advanced" role="tabpanel">
+        @Html.Partial("_DetailGeneral", Model)
+        
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-action="Index" class="btn btn-primary">顯示電表清單</a>
+</div>
+
+@section Scripts {
+    <script>
+        var triggerTabList = [].slice.call(document.querySelectorAll('#meterTabs a'));
+        triggerTabList.forEach(function (triggerEl) {
+            var tabTrigger = new bootstrap.Tab(triggerEl);
+            triggerEl.addEventListener('click', function (event) {
+                event.preventDefault();
+                tabTrigger.show();
+            });
+        });
+    </script>
+}

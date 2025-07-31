@@ -1,0 +1,28 @@
+﻿@model NewECO5.ViewModel.MeterDetailViewModel
+
+<table class="table table-bordered table-sm mt-3">
+    <tbody>
+        <tr>
+            <td class="text-end" style="width: 200px;">裝置名稱</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.DeviceName, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td class="text-end">裝置描述</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Description, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
+        <tr>
+            <td class="text-end">單線圖編號</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.DiagramNr, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td class="text-end">台電低壓供電</td>
+            <td>
+                <div class="form-check form-check-inline">
+                    @Html.CheckBoxFor(model => model.PowerMeterSetting.IsLowVoltage, new { @class = "form-check-input" })
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,51 @@
+﻿@model NewECO5.ViewModel.MeterDetailViewModel
+@using NewECO5.Models.Enum
+
+<table class="table table-bordered table-sm mt-3">
+    <tbody>
+        <tr>
+            <td class="text-end" style="width: 200px;">計算頻率 (分鐘)</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Dmd_Interval, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td class="text-end">經常(尖峰)</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Dmd_Capacity, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
+        <tr>
+            <td class="text-end">半尖峰(非夏月)</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Dmd_CapacityHalf, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td class="text-end">週六半尖峰</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Dmd_CapacitySatHalf, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
+        <tr>
+            <td class="text-end">離峰</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Dmd_CapacityOff, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td class="text-end">上限 (%)</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Dmd_UpperLimit, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
+        <tr>
+            <td class="text-end">下限 (%)</td>
+            <td>
+                @Html.EditorFor(model => model.PowerMeterSetting.Dmd_LowerLimit, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td class="text-end">預測模式</td>
+            <td>
+                @Html.DropDownListFor(model => model.PowerMeterSetting.Dmd_Mode,
+                         new SelectList(Enum.GetValues(typeof(DmdMode))),
+                         "-- 請選擇模式 --",
+                         new { @class = "form-select" })
+                @Html.ValidationMessageFor(model => model.PowerMeterSetting.Dmd_Mode, "", new { @class = "text-danger" })
+            </td>
+        </tr>
+    </tbody>
+</table>
