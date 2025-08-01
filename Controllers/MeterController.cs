@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore;
+using NewECO5.Models;
 using NewECO5.Services;
+
+
 using NewECO5.ViewModel;
 
 namespace NewECO5.Controllers
@@ -8,6 +12,9 @@ namespace NewECO5.Controllers
     public class MeterController : Controller
     {
         private readonly IMeterService _service;
+        private readonly PowerMeterReaderService _readerService;
+        private readonly NewECO5DBContext _context;
+
 
         public MeterController(IMeterService service)
         {
@@ -19,6 +26,34 @@ namespace NewECO5.Controllers
         {
             var viewModel = await _service.GetMeterDetailAsync(serialNr, searchQuery, searchField);
             return View(viewModel);
+        }
+        [HttpPost]
+        public async Task<IActionResult> ReadNow()
+        {
+            var ip = "192.168.1.35";
+            var port = 502;
+            var slaveId = (byte)2;
+
+            var result = await _readerService.ReadPA60Async(ip, port, slaveId);
+
+            if (result.Count > 0)
+            {
+                var reading = new MeterReading
+                {
+                    MeterName = "總用電",
+                    Power = result["功率"],
+                    Voltage = result["電壓"]
+                };
+                _context.MeterReadings.Add(reading);
+                await _context.SaveChangesAsync();
+                ViewBag.Result = $"讀取成功，功率：{reading.Power}，電壓：{reading.Voltage}";
+            }
+            else
+            {
+                ViewBag.Result = "讀取失敗";
+            }
+
+            return View("Detail"); // 或回原本頁面
         }
 
         // 儲存電表設定

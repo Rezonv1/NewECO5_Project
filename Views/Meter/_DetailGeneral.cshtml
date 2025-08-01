@@ -1,60 +1,23 @@
 ﻿@model NewECO5.ViewModel.MeterDetailViewModel
-@using NewECO5.Models.Enum
 
-<table class="table table-bordered table-sm mt-3">
-    <tbody>
-        <tr>
-            <td class="col-2 text-end">設備流水號</td>
-            <td class="col-4">
-                @Html.DisplayFor(model => model.MeterSetting.SerialNr)
-            </td>
-            <td class="col-2 text-end">站號</td>
-            <td class="col-4">
-                @Html.EditorFor(model => model.MeterSetting.MeterID, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.MeterSetting.MeterID, "", new { @class = "text-danger" })
-            </td>
-        </tr>
-        <tr>
-            <td class="text-end">是否啟用</td>
-            <td>
-                @Html.CheckBoxFor(model => model.MeterSetting.IsActived)
-            </td>
-            <td class="text-end">Modbus 格式</td>
-            <td>
-                @Html.DropDownListFor(model => model.MeterSetting.Mode,
-                         new SelectList(Enum.GetValues(typeof(ModbusModeEnum))),
-                         "-- 請選擇 --", new { @class = "form-select" })
-            </td>
-        </tr>
-        <tr>
-            <td class="text-end">裝置名稱</td>
-            <td>
-                @Html.EditorFor(model => model.PowerMeterSetting.DeviceName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.PowerMeterSetting.DeviceName, "", new { @class = "text-danger" })
-            </td>
-            <td class="text-end">裝置描述</td>
-            <td>
-                @Html.EditorFor(model => model.PowerMeterSetting.Description, new { htmlAttributes = new { @class = "form-control" } })
-            </td>
-        </tr>
-        <tr>
-            <td class="text-end">單線圖編號</td>
-            <td>
-                @Html.EditorFor(model => model.PowerMeterSetting.DiagramNr, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.PowerMeterSetting.DiagramNr, "", new { @class = "text-danger" })
-            </td>
-            <td class="text-end">台電低壓供電</td>
-            <td>
-                @Html.CheckBoxFor(model => model.PowerMeterSetting.IsLowVoltage)
-            </td>
-        </tr>
-        <tr>
-            <td class="text-end">每月自動歸零</td>
-            <td>
-                @Html.CheckBoxFor(model => model.PowerMeterSetting.AutoReset)
-            </td>
-            <td></td>
-            <td></td>
-        </tr>
-    </tbody>
-</table>
+<div class="detail-section">
+    <div class="mb-3">
+        <label class="form-label">裝置名稱</label>
+        @Html.EditorFor(model => model.PowerMeterSetting.DeviceName, new { htmlAttributes = new { @class = "form-control" } })
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">裝置描述</label>
+        @Html.EditorFor(model => model.PowerMeterSetting.Description, new { htmlAttributes = new { @class = "form-control" } })
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">單線圖編號</label>
+        @Html.EditorFor(model => model.PowerMeterSetting.DiagramNr, new { htmlAttributes = new { @class = "form-control" } })
+    </div>
+
+    <div class="form-check mb-3">
+        @Html.CheckBoxFor(model => model.PowerMeterSetting.IsLowVoltage, new { @class = "form-check-input" })
+        <label class="form-check-label" for="PowerMeterSetting_IsLowVoltage">台電低壓供電</label>
+    </div>
+</div>

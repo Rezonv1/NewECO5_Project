@@ -1,91 +1,101 @@
-﻿@model NewECO5.ViewModel.MeterDetailViewModel
-@using NewECO5.Models.Enum
+﻿@model NewECO5.ViewModel.PowerMeterSettingViewModel
 
-<table class="table table-bordered table-sm mt-3">
-    <tbody>
-        <tr>
-            <td class="text-end" style="width: 200px;">電流上限</td>
-            <td>
-                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_I_UpperLimit, new { htmlAttributes = new { @class = "form-control" } })
-            </td>
-            <td class="text-end">電流下限</td>
-            <td>
-                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_I_LowerLimit, new { htmlAttributes = new { @class = "form-control" } })
-            </td>
-        </tr>
-        <tr>
-            <td class="text-end">電壓型式</td>
-            <td>
-                @Html.DropDownListFor(model => model.PowerMeterSetting.Alarm_V_Type,
-                         new SelectList(Enum.GetValues(typeof(VotageType))),
-                         "-- 請選擇 --",
-                         new { @class = "form-select" })
-                @Html.ValidationMessageFor(model => model.PowerMeterSetting.Alarm_V_Type, "", new { @class = "text-danger" })
-            </td>
-            <td class="text-end">電壓上限</td>
-            <td>
-                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_V_UpperLimit, new { htmlAttributes = new { @class = "form-control" } })
-            </td>
-        </tr>
-        <tr>
-            <td class="text-end">電壓下限</td>
-            <td>
-                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_V_LowerLimit, new { htmlAttributes = new { @class = "form-control" } })
-            </td>
-            <td class="text-end">頻率上限</td>
-            <td>
-                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_HzUpperLimit, new { htmlAttributes = new { @class = "form-control" } })
-            </td>
-        </tr>
-        <tr>
-            <td class="text-end">頻率下限</td>
-            <td>
-                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_HzLowerLimit, new { htmlAttributes = new { @class = "form-control" } })
-            </td>
-            <td class="text-end">功因上限</td>
-            <td>
-                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_PfUpperLimit, new { htmlAttributes = new { @class = "form-control" } })
-            </td>
-        </tr>
-        <tr>
-            <td class="text-end">功因下限</td>
-            <td>
-                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_PfLowerLimit, new { htmlAttributes = new { @class = "form-control" } })
-            </td>
-            <td class="text-end">電量上限</td>
-            <td>
-                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_KWh_UpperLimit, new { htmlAttributes = new { @class = "form-control" } })
-            </td>
-        </tr>
-        <tr>
-            <td class="text-end">功率上限</td>
-            <td>
-                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_kW_UpperLimit, new { htmlAttributes = new { @class = "form-control" } })
-            </td>
-            <td class="text-end">功率下限</td>
-            <td>
-                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_kW_LowerLimit, new { htmlAttributes = new { @class = "form-control" } })
-            </td>
-        </tr>
-        <tr>
-            <td class="text-end">待機功率值</td>
-            <td>
-                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_kW_IdelValue, new { htmlAttributes = new { @class = "form-control" } })
-            </td>
-            <td class="text-end">未關閉功率上限</td>
-            <td>
-                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_notPowerOff_kW, new { htmlAttributes = new { @class = "form-control" } })
-            </td>
-        </tr>
-        <tr>
-            <td class="text-end">未關閉警報開始時間</td>
-            <td>
-                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_notPowerOffAlarmStartTime, new { htmlAttributes = new { @class = "form-control", type = "datetime-local" } })
-            </td>
-            <td class="text-end">未關閉警報結束時間</td>
-            <td>
-                @Html.EditorFor(model => model.PowerMeterSetting.Alarm_notPowerOffAlarmEndTime, new { htmlAttributes = new { @class = "form-control", type = "datetime-local" } })
-            </td>
-        </tr>
-    </tbody>
-</table>
+
+
+
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th style="width: 120px;"></th>
+                <th style="width: 180px;">上限</th>
+                <th style="width: 180px;">下限</th>
+                <th style="width: 80px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>電流</td>
+                <td><input asp-for="Alarm_I_UpperLimit" class="form-control" /></td>
+                <td><input asp-for="Alarm_I_LowerLimit" class="form-control" /></td>
+                <td>A</td>
+            </tr>
+            <tr>
+                <td>電壓</td>
+                <td><input asp-for="Alarm_V_UpperLimit" class="form-control" /></td>
+                <td><input asp-for="Alarm_V_LowerLimit" class="form-control" /></td>
+                <td>V</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="3">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" asp-for="Alarm_V_Type" value="0" />
+                        <label class="form-check-label">線電壓</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" asp-for="Alarm_V_Type" value="1" />
+                        <label class="form-check-label">相電壓</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>頻率</td>
+                <td><input asp-for="Alarm_HzUpperLimit" class="form-control" /></td>
+                <td><input asp-for="Alarm_HzLowerLimit" class="form-control" /></td>
+                <td>Hz</td>
+            </tr>
+            <tr>
+                <td>功率</td>
+                <td><input asp-for="Alarm_kW_UpperLimit" class="form-control" /></td>
+                <td><input asp-for="Alarm_kW_LowerLimit" class="form-control" /></td>
+                <td>
+                    kW <span class="ms-2">待機值</span>
+                    <input asp-for="Alarm_kW_IdelValue" class="form-control d-inline-block ms-2" style="width: 120px;" />
+                </td>
+            </tr>
+            <tr>
+                <td>功因</td>
+                <td><input asp-for="Alarm_PfUpperLimit" class="form-control" /></td>
+                <td><input asp-for="Alarm_PfLowerLimit" class="form-control" /></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<hr />
+
+<h5 class="mt-4">用電未關告警</h5>
+<div class="row mb-3">
+    <label class="col-sm-2 col-form-label">功率上限</label>
+    <div class="col-sm-3">
+        <input asp-for="Alarm_notPowerOff_kW" class="form-control" />
+    </div>
+    <div class="col-auto">
+        <span class="form-text">kW</span>
+    </div>
+</div>
+<div class="row mb-3">
+    <label class="col-sm-2 col-form-label">開始時間</label>
+    <div class="col-sm-3">
+        <input asp-for="Alarm_notPowerOffAlarmStartTime" class="form-control" type="datetime-local" />
+    </div>
+    <label class="col-sm-2 col-form-label text-end">結束時間</label>
+    <div class="col-sm-3">
+        <input asp-for="Alarm_notPowerOffAlarmEndTime" class="form-control" type="datetime-local" />
+    </div>
+</div>
+
+<hr />
+
+<h5 class="mt-4">超過用量告警</h5>
+<div class="row mb-3">
+    <label class="col-sm-2 col-form-label">電量上限</label>
+    <div class="col-sm-3">
+        <input asp-for="Alarm_KWh_UpperLimit" class="form-control" />
+    </div>
+    <div class="col-auto">
+        <span class="form-text">kWh</span>
+    </div>
+</div>
