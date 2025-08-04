@@ -6,13 +6,20 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/detail.css" />
 }
-<form asp-action="ReadNow" method="post">
-    <button type="submit" class="btn btn-success">立即讀取總用電</button>
+
+<form method="get" asp-controller="Meter" asp-action="ReadNowPage">
+    <input type="hidden" name="serialNr" value="@Model.MeterSetting.SerialNr" />
+    <button type="submit" class="btn btn-primary">📡 立即讀取</button>
 </form>
+
 <div class="container-fluid" id="pageWrapper">
     <div id="mainDetailArea">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h2>電表詳細資料</h2>
+            <a href="@Url.Action("ScanRegisters", "Meter")" class="btn btn-outline-secondary me-2">
+                🔍 掃描暫存器
+            </a>
+            <a class="btn btn-outline-success" href="/Meter/TestConnection">測試通訊</a>
             <button id="toggleMeterList" class="btn btn-primary" type="button"
                     data-bs-toggle="offcanvas" data-bs-target="#meterListCanvas">
                 顯示電表清單
@@ -38,9 +45,8 @@
         </div>
     </div>
 
-    <!-- Offcanvas 電表清單 -->
-    <div class="offcanvas offcanvas-end w-50" tabindex="-1" id="meterListCanvas" data-bs-backdrop="false">
-
+    <!-- ✅ Offcanvas 電表清單 -->
+    <div class="offcanvas offcanvas-start w-50" tabindex="-1" id="meterListCanvas" data-bs-backdrop="false">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title">電表清單</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>

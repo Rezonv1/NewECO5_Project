@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "電表即時通訊測試";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (ViewBag.Result != null)
+{
+    <div class="alert alert-info">
+        <strong>結果：</strong> @ViewBag.Result
+    </div>
+}
+
+<form asp-action="ReadNow" method="post">
+    <div class="form-group">
+        <label for="serialNr">選擇電表</label>
+        <select class="form-control" name="serialNr">
+            @foreach (var item in ViewBag.SerialOptions as List<SelectListItem>)
+            {
+                <option value="@item.Value">@item.Text</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">讀取資料</button>
+</form>

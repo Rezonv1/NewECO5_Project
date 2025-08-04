@@ -16,6 +16,7 @@ builder.Services.AddDbContext<NewECO5DBContext>(options =>
 builder.Services.AddScoped<Comm_UnitSettingService>();
 builder.Services.AddScoped<MeterService>(); // 若 MeterController 用的是類別 MeterService
 builder.Services.AddScoped<IMeterService, MeterService>();
+builder.Services.AddScoped<PowerMeterReaderService>();
 // 如果你是用介面方式注入，可改成這樣：
 // builder.Services.AddScoped<IMeterService, MeterService>();
 

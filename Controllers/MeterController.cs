@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NewECO5.Models;
 using NewECO5.Services;
-
-
 using NewECO5.ViewModel;
+using NModbus;
+using System.Net.Sockets;
 
 namespace NewECO5.Controllers
 {
@@ -14,46 +15,22 @@ namespace NewECO5.Controllers
         private readonly IMeterService _service;
         private readonly PowerMeterReaderService _readerService;
         private readonly NewECO5DBContext _context;
+        private readonly PowerMeterReaderService _powerMeterReaderService;
 
-
-        public MeterController(IMeterService service)
+        public MeterController(IMeterService service, NewECO5DBContext context, PowerMeterReaderService powerMeterReaderService)
         {
             _service = service;
+            _context = context;
+            _powerMeterReaderService = powerMeterReaderService;
         }
 
-        // 讀取電表詳細資料
+        // 讀取電表詳細資料（支援網址導覽與搜尋參數）
+        [HttpGet]
+        [Route("Meter/Detail/{serialNr:int?}")]
         public async Task<IActionResult> Detail(int? serialNr, string? searchQuery = null, string? searchField = null)
         {
             var viewModel = await _service.GetMeterDetailAsync(serialNr, searchQuery, searchField);
             return View(viewModel);
-        }
-        [HttpPost]
-        public async Task<IActionResult> ReadNow()
-        {
-            var ip = "192.168.1.35";
-            var port = 502;
-            var slaveId = (byte)2;
-
-            var result = await _readerService.ReadPA60Async(ip, port, slaveId);
-
-            if (result.Count > 0)
-            {
-                var reading = new MeterReading
-                {
-                    MeterName = "總用電",
-                    Power = result["功率"],
-                    Voltage = result["電壓"]
-                };
-                _context.MeterReadings.Add(reading);
-                await _context.SaveChangesAsync();
-                ViewBag.Result = $"讀取成功，功率：{reading.Power}，電壓：{reading.Voltage}";
-            }
-            else
-            {
-                ViewBag.Result = "讀取失敗";
-            }
-
-            return View("Detail"); // 或回原本頁面
         }
 
         // 儲存電表設定
@@ -63,7 +40,6 @@ namespace NewECO5.Controllers
         {
             if (!await _service.SaveMeterSettingAsync(viewModel, ModelState))
             {
-                // ⚠️ 如果驗證失敗，要明確指定回 Detail.cshtml，避免回到錯誤的 View（例如 Index）
                 return View("Detail", viewModel);
             }
 
@@ -71,12 +47,117 @@ namespace NewECO5.Controllers
             return RedirectToAction(nameof(Detail), new { serialNr = viewModel.MeterSetting.SerialNr });
         }
 
-        // 搜尋用
+        // 搜尋結果（左側清單）
         [HttpPost]
         public async Task<IActionResult> DetailSearch(string searchQuery, string searchField)
         {
             var results = await _service.SearchMetersAsync(searchQuery, searchField);
             return Json(results);
+        }
+
+        // SelectList：設備選單
+        private List<SelectListItem> GetSerialSelectList()
+        {
+            return _context.MeterSettings
+                .Select(m => new SelectListItem
+                {
+                    Value = m.SerialNr.ToString(),
+                    Text = $"{m.SerialNr} - {m.DeviceName}"
+                }).ToList();
+        }
+
+        // 通訊測試頁面 GET
+        [HttpGet]
+        public IActionResult TestConnection()
+        {
+            return View();
+        }
+
+        // 通訊測試 POST
+        [HttpPost]
+        public async Task<IActionResult> TestConnection(string ip, int port, byte meterId)
+        {
+            try
+            {
+                using var client = new TcpClient();
+                await client.ConnectAsync(ip, port);
+
+                var factory = new ModbusFactory();
+                var master = factory.CreateMaster(client);
+
+                ushort[] registers = await master.ReadHoldingRegistersAsync(meterId, 0, 4);
+                ViewBag.Result = $"✅ 成功連接至 {ip}:{port}，讀取值：{string.Join(", ", registers)}";
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Result = $"❌ 通訊失敗：{ex.Message}";
+            }
+
+            return View();
+        }
+
+        // 暫存器掃描頁 GET
+        [HttpGet]
+        public IActionResult ScanRegisters() => View();
+
+        // 暫存器掃描 POST
+        [HttpPost]
+        public async Task<IActionResult> ScanRegisters(string ip, int port, byte slaveId, ushort startAddress, ushort numRegisters)
+        {
+            try
+            {
+                using var client = new TcpClient(ip, port);
+                var factory = new ModbusFactory();
+                var master = factory.CreateMaster(client);
+
+                ushort[] data = await master.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
+                var result = new Dictionary<ushort, ushort>();
+                for (int i = 0; i < data.Length; i++)
+                {
+                    result[(ushort)(startAddress + i)] = data[i];
+                }
+
+                ViewBag.Results = result;
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "❌ 掃描失敗：" + ex.Message;
+            }
+
+            return View();
+        }
+
+        // 即時讀取電表資料
+        [HttpGet]
+        public async Task<IActionResult> ReadNow(int serialNr)
+        {
+            try
+            {
+                var result = await _powerMeterReaderService.ReadNowAsync(serialNr);
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        public async Task<IActionResult> ReadNowPage(int serialNr)
+        {
+            if (serialNr <= 0)
+                return BadRequest("未提供正確的 SerialNr");
+
+            var result = await _powerMeterReaderService.ReadNowAsync(serialNr);
+
+            if (result == null || result.Count == 0)
+            {
+                ViewBag.Message = "❌ 通訊失敗或未讀取到資料";
+                return View("ReadNowPage");
+            }
+
+            ViewBag.Message = "✅ 通訊成功，資料如下：";
+            ViewBag.Data = result;
+
+            return View("ReadNowPage");
         }
 
         // Ajax：依品牌取得型號

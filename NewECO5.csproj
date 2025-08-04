@@ -16,9 +16,18 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="NModbus" Version="2.0.305" />
     <PackageReference Include="NModbus4" Version="2.1.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
     <PackageReference Include="System.IO.Ports" Version="9.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ECO.MeterHub4-master\ECO.MeterHub4-master\Comm\Comm\Comm.csproj" />
+    <ProjectReference Include="..\ECO.MeterHub4-master\ECO.MeterHub4-master\meter\meter\Meter.csproj" />
+    <ProjectReference Include="..\ECO.MeterHub4-master\ECO.MeterHub4-master\ModbusLib\ModbusLib\ModbusLib.csproj" />
+    <ProjectReference Include="..\ECO.MeterHub4-master\ECO.MeterHub4-master\PowerMeter\PowerMeter\PowerMeter.csproj" />
+    <ProjectReference Include="..\ECO.MeterHub4-master\ECO.MeterHub4-master\Predict\Predict.csproj" />
   </ItemGroup>
 
 </Project>

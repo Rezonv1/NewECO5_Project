@@ -81,7 +81,8 @@ public class MeterService : IMeterService
                     IsActived = setting.IsActived,
                     Mode = setting.ModbusMode,
                     Protocol_Id = setting.Protocol_Id,
-                    MetersGroupSetting_Id = setting.MetersGroupSetting_Id
+                    MetersGroupSetting_Id = setting.MetersGroupSetting_Id,
+                    ProtocolStr = setting.ProtocolStr
                 };
 
                 if (setting.Protocol_Id > 0)
@@ -196,7 +197,10 @@ public class MeterService : IMeterService
                 prefix += $"_{protocol.Loop}";
 
             meter.ProtocolStr = $"<{prefix}>{protocol.Content}</{prefix}>";
+            viewModel.ProtocolStr = $"<{prefix}>{protocol.Content}</{prefix}>";
         }
+
+
 
         // MetersGroupSetting 內容帶入
         var comm = await _context.Comm_UnitSettings.FirstOrDefaultAsync(x => x.Id == meter.MetersGroupSetting_Id);

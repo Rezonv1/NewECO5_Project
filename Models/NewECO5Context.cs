@@ -18,7 +18,8 @@ namespace NewECO5.Models
         public DbSet<PowerMeterSetting> PowerMeterSettings { get; set; } = null!;
 
         public DbSet<Protocol> Protocols { get; set; }
-        public DbSet<MeterReading> MeterReadings { get; set; }
+        public DbSet<MeterRealtimeRecord> MeterRealtimeRecords { get; set; }
+
         public DbSet<Comm_UnitSetting> Comm_UnitSettings { get; set; } = null!;
         public NewECO5DBContext(DbContextOptions<NewECO5DBContext> options) : base(options)
         {

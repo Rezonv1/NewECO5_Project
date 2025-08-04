@@ -38,6 +38,8 @@ namespace NewECO5.Models
         /// »¡©ú
         /// </summary>
         public string? Description { get; set; }
+        public string IP { get; set; }
+         public string Port { get; set; }
 
     }
 }

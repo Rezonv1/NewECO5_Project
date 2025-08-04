@@ -1,0 +1,66 @@
+﻿@{
+    ViewData["Title"] = "暫存器掃描";
+}
+
+<div class="container mt-4">
+    <h3>🔍 PA60 暫存器掃描</h3>
+    <form method="post" asp-action="ScanRegisters">
+        <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label">IP 位址</label>
+            <div class="col-sm-4">
+                <input name="ip" class="form-control" value="192.168.1.35" />
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label">Port</label>
+            <div class="col-sm-2">
+                <input name="port" class="form-control" value="502" />
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label">站號 (Slave ID)</label>
+            <div class="col-sm-2">
+                <input name="slaveId" class="form-control" value="2" />
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label">起始位址</label>
+            <div class="col-sm-2">
+                <input name="startAddress" class="form-control" value="0" />
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label">數量</label>
+            <div class="col-sm-2">
+                <input name="numRegisters" class="form-control" value="10" />
+            </div>
+        </div>
+        <button class="btn btn-primary" type="submit">掃描暫存器</button>
+    </form>
+
+    @if (ViewBag.Results is Dictionary<ushort, ushort> resultData)
+    {
+        <h5 class="mt-4">📋 掃描結果</h5>
+        <table class="table table-bordered w-50">
+            <thead>
+                <tr>
+                    <th>位址</th>
+                    <th>數值</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var kv in resultData)
+                {
+                    <tr>
+                        <td>@kv.Key</td>
+                        <td>@kv.Value</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger mt-4">@ViewBag.Error</div>
+    }
+</div>

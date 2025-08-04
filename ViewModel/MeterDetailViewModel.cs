@@ -39,13 +39,18 @@ namespace NewECO5.ViewModel
         /// <summary>
         /// 迴圈下拉選單
         /// </summary>
-        public List<SelectListItem> Loop { get; set; } = new List<SelectListItem>();
-
+       
         public List<SelectListItem> Description { get; set; } = new List<SelectListItem>();
         public List<SelectListItem> IsTCPSetting { get; set; } = new List<SelectListItem>();
         public List<SelectListItem> ConnectionStr { get; set; } = new List<SelectListItem>();
 
         public string? SearchQuery { get; set; }
         public string? SearchField { get; set; }
+
+        /// <summary>
+        /// 額外加入的 ProtocolStr，供畫面與 JS 使用
+        /// </summary>
+        public string? ProtocolStr { get; set; } = string.Empty;
+        public List<SelectListItem> Loop { get; internal set; }
     }
 }

@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "立即讀取結果";
+    var serialNr = Context.Request.Query["serialNr"];
+    var data = ViewBag.Data as Dictionary<string, float>;
+}
+
+<h2 class="mt-3">📡 立即讀取結果</h2>
+
+<div class="mt-3">
+    <strong>設備流水號：</strong> @serialNr
+</div>
+
+@if (data != null && data.Any())
+{
+    <div class="mt-3">
+        <ul class="list-group">
+            @foreach (var item in data)
+            {
+                <li class="list-group-item">
+                    <strong>@item.Key：</strong> @item.Value
+                </li>
+            }
+        </ul>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning mt-3">
+        無法取得讀值結果，請稍後再試。
+    </div>
+}
+
+<a href="@Url.Action("Detail", "Meter", new { serialNr = serialNr })" class="btn btn-secondary mt-3">
+    ← 返回電表詳情
+</a>

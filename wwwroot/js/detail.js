@@ -69,7 +69,38 @@
     $tableBody.on('click', 'tr', function (e) {
         if ($(e.target).closest('.btn').length === 0) {
             const id = $(this).data('id');
-            if (id) window.location.href = `/MetersGroupSetting/Edit/${id}`;
+            if (id) {
+                window.location.href = `/Meter/Detail?serialNr=${id}`;
+            }
         }
+    });
+
+    // ✅ 綁定立即讀取按鈕（修正 ID）
+    $(document).on("click", "#btnReadNow", function () {
+        const serialNr = $("#SerialNr").val();
+        if (!serialNr) {
+            alert("請確認已載入設備 SerialNr");
+            return;
+        }
+
+        console.log("🚀 觸發立即讀取，SerialNr =", serialNr);
+
+        $.post('/Meter/ReadNow', { serialNr: serialNr })
+            .done(function (data) {
+                console.log("✅ 讀取成功", data);
+                const $result = $('#readResult');
+                const $list = $('#read-values');
+                $list.empty();
+
+                for (const key in data) {
+                    $list.append(`<li><strong>${key}：</strong>${data[key]}</li>`);
+                }
+
+                $result.removeClass("d-none");
+            })
+            .fail(function (xhr) {
+                console.error("❌ 讀取失敗", xhr.responseText || xhr.statusText);
+                alert("讀取失敗，請稍後再試");
+            });
     });
 });

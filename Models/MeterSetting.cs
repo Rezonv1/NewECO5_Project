@@ -46,12 +46,14 @@ namespace NewECO5.Models.Enum
         /// 關聯 MetersGroupSetting_Id 資料表的 Id
         /// </summary>
         public short MetersGroupSetting_Id { get; set; }
-
+        public string DeviceName { get; set; } = "";
         /// <summary>
         /// 通訊協定字串
         /// </summary>
         [MaxLength(500)]
         public string? ProtocolStr { get; set; } = "";
         #endregion
+        [ForeignKey("MetersGroupSetting_Id")]
+        public Comm_UnitSetting? Comm_UnitSetting { get; set; }  // Navigation Property
     }
 }
